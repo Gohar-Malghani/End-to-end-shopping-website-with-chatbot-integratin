@@ -1,0 +1,161 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping assistant | ShopNest</title>
+
+    <link rel="stylesheet" href="{% static 'chat.css' %}">
+    <script src="{% static 'chat.js' %}?v=2" defer></script>
+</head>
+<body>
+
+    <!-- Django CSRF token for secure POST requests -->
+    <form id="csrf-form" hidden>
+        {% csrf_token %}
+    </form>
+
+    <div class="app">
+
+        <!-- Dark Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="brand">
+                <div class="brand-icon">✦</div>
+                <div>
+                    <h2>ShopNest</h2>
+                    <span>Shopping assistant</span>
+                </div>
+            </div>
+
+            <a class="chat-nav-link" href="{% url 'shop_home' %}">← Back to the shop</a>
+            <button class="new-chat" id="new-chat">
+                <span>＋</span> New conversation
+            </button>
+
+            <div class="sidebar-label">HERE TO HELP</div>
+
+            <a class="sidebar-item active" href="{% url 'order_history' %}">
+                <span>◉</span> My orders
+            </a>
+
+            <div class="sidebar-bottom">
+                <div class="status-dot"></div>
+                <div>
+                    <strong>Local AI</strong>
+                    <small>Product & order help</small>
+                </div>
+                <span class="online">Online</span>
+            </div>
+        </aside>
+
+        <!-- Main Chat -->
+        <main class="main">
+
+            <header class="topbar">
+                <button class="menu-button" id="menu-button"
+                        aria-label="Toggle sidebar">☰</button>
+
+                <div class="topbar-title">
+                    <h3>Shopping assistant</h3>
+                    <span><i class="status-dot"></i> Here for your shop questions</span>
+                </div>
+
+                <span class="chat-user">Hi, {{ request.user.username }}</span>
+                <a class="chat-shop-link" href="{% url 'shop_home' %}">Continue shopping <span aria-hidden="true">↗</span></a>
+            </header>
+
+            <section class="chat-area" id="chat-area"
+                     aria-live="polite">
+
+                <div class="welcome" id="welcome">
+                    <div class="welcome-icon">✦</div>
+                    <p class="eyebrow">YOUR SHOPPING ASSISTANT</p>
+                    <h1>Welcome, {{ request.user.username }}.<br>Find something you’ll love.</h1>
+                    <p class="welcome-description">
+                        Ask about shoes, watches, product availability, or your orders. I can share product links so you can add items to your bag.
+                    </p>
+
+                    <div class="suggestions">
+                        <button class="suggestion"
+                                data-question="Can you help me find comfortable everyday shoes?">
+                            <span>👟</span>
+                            <span>
+                                <strong>Find some shoes</strong>
+                                <small>Browse comfortable everyday picks</small>
+                            </span>
+                            <span class="suggestion-arrow">↗</span>
+                        </button>
+
+                        <button class="suggestion"
+                                data-question="Show me a watch for everyday wear.">
+                            <span>⌚</span>
+                            <span>
+                                <strong>Pick a watch</strong>
+                                <small>Find a watch for every day</small>
+                            </span>
+                            <span class="suggestion-arrow">↗</span>
+                        </button>
+
+                        <button class="suggestion"
+                                data-question="What is the status of my latest order?">
+                            <span>📦</span>
+                            <span>
+                                <strong>Check an order</strong>
+                                <small>Get an update on your order</small>
+                            </span>
+                            <span class="suggestion-arrow">↗</span>
+                        </button>
+
+                        <button class="suggestion"
+                                data-question="What payment options are available?">
+                            <span>◇</span>
+                            <span>
+                                <strong>Delivery & payment</strong>
+                                <small>Ask about cash on delivery</small>
+                            </span>
+                            <span class="suggestion-arrow">↗</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="messages" id="messages"></div>
+
+            </section>
+
+            <footer class="composer-area">
+                <form id="chat-form" class="composer"
+                      data-chat-url="{% url 'chat_api' %}">
+                    <textarea
+                        id="message-input"
+                        name="question"
+                        rows="1"
+                        maxlength="2000"
+                        placeholder="Message your support assistant..."
+                        aria-label="Your message"
+                        required
+                    ></textarea>
+
+                    <div class="composer-bottom">
+                        <span class="input-hint">
+                            Enter to send · Shift + Enter for a new line
+                        </span>
+
+                        <button type="submit" id="send-button"
+                                aria-label="Send message">
+                            <span>↑</span>
+                        </button>
+                    </div>
+                </form>
+
+                <p class="disclaimer">
+                    AI-generated responses may be inaccurate. Avoid sharing
+                    passwords or sensitive personal information.
+                </p>
+            </footer>
+
+        </main>
+    </div>
+
+</body>
+</html>

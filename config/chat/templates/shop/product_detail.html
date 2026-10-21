@@ -1,0 +1,42 @@
+{% extends "shop/base.html" %}
+{% load static %}
+
+{% block title %}{{ product.name }} | ShopNest{% endblock %}
+
+{% block content %}
+<main class="page-shell">
+    <p class="breadcrumbs"><a href="{% url 'shop_home' %}">Shop</a><span>/</span>{{ product.get_category_display }}<span>/</span>{{ product.name }}</p>
+    <section class="product-detail">
+        <div class="detail-art product-art-{{ product.category }}">
+            {% if product.image_url %}
+                <img src="{{ product.image_url }}" alt="{{ product.name }}">
+            {% else %}
+                <img class="product-placeholder-image" src="{% static product.placeholder_image %}" alt="{{ product.name }}">
+            {% endif %}
+            {% if product.featured %}<span class="product-badge">A favorite</span>{% endif %}
+        </div>
+        <div class="detail-copy">
+            <p class="eyebrow">{{ product.get_category_display }} · SHOP WITH US</p>
+            <h1>{{ product.name }}</h1>
+            <p class="detail-price">PKR {{ product.price|floatformat:0 }}</p>
+            <p class="detail-description">{{ product.description }}</p>
+            <div class="detail-availability">
+                <span class="{% if product.stock %}availability-dot{% else %}availability-dot unavailable{% endif %}"></span>
+                {% if product.stock %}In stock · {{ product.stock }} available{% else %}Currently out of stock{% endif %}
+            </div>
+            {% if product.stock %}
+                <form method="post" action="{% url 'cart_add' product.slug %}">
+                    {% csrf_token %}
+                    <button class="button button-dark add-to-bag" type="submit">Add to bag <span aria-hidden="true">↗</span></button>
+                </form>
+            {% else %}
+                <button class="button button-dark add-to-bag" type="button" disabled>Out of stock</button>
+            {% endif %}
+            <div class="detail-perks">
+                <p><span aria-hidden="true">◇</span> Cash on delivery available</p>
+                <p><span aria-hidden="true">◇</span> Order support from our shopping assistant</p>
+            </div>
+        </div>
+    </section>
+</main>
+{% endblock %}

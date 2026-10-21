@@ -1,0 +1,117 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f7f8fc">
+    <title>Create account | ShopNest</title>
+    <link rel="stylesheet" href="{% static 'shop.css' %}">
+    <link rel="stylesheet" href="{% static 'login.css' %}">
+</head>
+<body>
+    <main class="login-layout account-layout">
+        <section class="welcome-panel" aria-label="About ShopNest">
+            <a class="brand" href="{% url 'login_page' %}">
+                <img class="account-logo" src="{% static 'shop/images/shop-logo.svg' %}" alt="">
+                <span>ShopNest</span>
+            </a>
+
+            <div class="welcome-copy">
+                <p class="eyebrow">MAKE YOURSELF AT HOME</p>
+                <h1>Good finds<br>start here.</h1>
+                <p class="welcome-description">
+                    Create an account to shop your favorites, track orders, and
+                    get help from our shopping assistant.
+                </p>
+            </div>
+
+            <p class="panel-footer">Everyday favorites, picked for you.</p>
+        </section>
+
+        <section class="form-panel register-panel" aria-labelledby="register-title">
+            <div class="login-card">
+                <div class="mobile-brand">
+                    <img class="account-logo" src="{% static 'shop/images/shop-logo.svg' %}" alt="">
+                    <span>ShopNest</span>
+                </div>
+                <p class="eyebrow">GET STARTED</p>
+                <h2 id="register-title">Create your account</h2>
+                <p class="form-intro">A few details and your shop is ready.</p>
+
+                {% if messages %}
+                    <div class="messages" role="alert" aria-live="polite">
+                        {% for message in messages %}
+                            <p class="message {{ message.tags }}">{{ message }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <form method="post" action="{% url 'register_page' %}" class="login-form register-form">
+                    {% csrf_token %}
+
+                    <label for="username">Username</label>
+                    <input
+                        id="username"
+                        name="username"
+                        type="text"
+                        autocomplete="username"
+                        autocapitalize="none"
+                        spellcheck="false"
+                        placeholder="Choose a username"
+                        value="{{ request.POST.username|default:'' }}"
+                        required
+                        autofocus
+                    >
+
+                    <label for="email">Email address</label>
+                    <input
+                        id="email"
+                        name="email"
+                        type="email"
+                        autocomplete="email"
+                        placeholder="you@example.com"
+                        value="{{ request.POST.email|default:'' }}"
+                        required
+                    >
+
+                    <label for="password">Password</label>
+                    <input
+                        id="password"
+                        name="password"
+                        type="password"
+                        autocomplete="new-password"
+                        placeholder="Create a password"
+                        required
+                    >
+
+                    <label for="confirm_password">Confirm password</label>
+                    <input
+                        id="confirm_password"
+                        name="confirm_password"
+                        type="password"
+                        autocomplete="new-password"
+                        placeholder="Enter your password again"
+                        required
+                    >
+
+                    <button type="submit" class="submit-button">
+                        Create account <span aria-hidden="true">→</span>
+                    </button>
+                </form>
+
+                <p class="account-switch">
+                    Already have an account?
+                    <a href="{% url 'login_page' %}">Sign in</a>
+                </p>
+                <p class="security-note">
+                    <span aria-hidden="true">◈</span>
+                    Your account and order details are kept secure.
+                </p>
+            </div>
+            <footer class="form-footer">© {% now "Y" %} ShopNest</footer>
+        </section>
+    </main>
+    {% include "chat/widget.html" %}
+</body>
+</html>

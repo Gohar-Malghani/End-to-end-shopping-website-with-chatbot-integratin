@@ -1,0 +1,104 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f7f8fc">
+    <title>Sign in | ShopNest</title>
+    <link rel="stylesheet" href="{% static 'shop.css' %}">
+    <link rel="stylesheet" href="{% static 'login.css' %}">
+</head>
+<body>
+    <main class="login-layout account-layout">
+        <section class="welcome-panel" aria-label="About ShopNest">
+            <a class="brand" href="{% url 'login_page' %}">
+                <img class="account-logo" src="{% static 'shop/images/shop-logo.svg' %}" alt="">
+                <span>ShopNest</span>
+            </a>
+
+            <div class="welcome-copy">
+                <p class="eyebrow">GOOD TO SEE YOU AGAIN</p>
+                <h1>Welcome back<br>to your shop.</h1>
+                <p class="welcome-description">
+                    Sign in to find your next favorite, manage your orders, or
+                    chat with your shopping assistant.
+                </p>
+            </div>
+
+            <p class="panel-footer">Everyday favorites, picked for you.</p>
+        </section>
+
+        <section class="form-panel" aria-labelledby="login-title">
+            <div class="login-card">
+                <div class="mobile-brand">
+                    <img class="account-logo" src="{% static 'shop/images/shop-logo.svg' %}" alt="">
+                    <span>ShopNest</span>
+                </div>
+                <p class="eyebrow">WELCOME BACK</p>
+                <h2 id="login-title">Sign in to your account</h2>
+                <p class="form-intro">Enter your details to continue to the shop.</p>
+
+                {% if messages %}
+                    <div class="messages" role="alert" aria-live="polite">
+                        {% for message in messages %}
+                            <p class="message {{ message.tags }}">{{ message }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <form method="post" action="{% url 'login_page' %}" class="login-form">
+                    {% csrf_token %}
+                    <input type="hidden" name="next" value="{{ next }}">
+
+                    <label for="username">Username</label>
+                    <input
+                        id="username"
+                        name="username"
+                        type="text"
+                        autocomplete="username"
+                        autocapitalize="none"
+                        spellcheck="false"
+                        placeholder="Your username"
+                        value="{{ request.POST.username|default:'' }}"
+                        required
+                        autofocus
+                    >
+
+                    <label for="password">Password</label>
+                    <input
+                        id="password"
+                        name="password"
+                        type="password"
+                        autocomplete="current-password"
+                        placeholder="Your password"
+                        required
+                    >
+
+                    <button type="submit" class="submit-button">
+                        Sign in <span aria-hidden="true">→</span>
+                    </button>
+                </form>
+
+                {% if request.user.is_authenticated %}
+                    <p class="account-switch">
+                        Already signed in?
+                        <a href="{% url 'page_chat' %}">Continue to chat</a>
+                    </p>
+                {% endif %}
+
+                <p class="security-note">
+                    <span aria-hidden="true">◈</span>
+                    Your account and order details are protected.
+                </p>
+                <p class="account-switch">
+                    New here?
+                    <a href="{% url 'register_page' %}">Create an account</a>
+                </p>
+            </div>
+            <footer class="form-footer">© {% now "Y" %} ShopNest</footer>
+        </section>
+    </main>
+    {% include "chat/widget.html" %}
+</body>
+</html>

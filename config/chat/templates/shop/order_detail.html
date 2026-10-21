@@ -1,0 +1,47 @@
+{% extends "shop/base.html" %}
+
+{% block title %}Order details | ShopNest{% endblock %}
+
+{% block content %}
+<main class="page-shell narrow-shell">
+    <p class="eyebrow">THANK YOU FOR YOUR ORDER</p>
+    <section class="order-confirmation">
+        <div class="confirmation-mark" aria-hidden="true">✓</div>
+        <h1>We've got it.</h1>
+        <p>Your order <strong>{{ order.reference|slice:":8"|upper }}</strong> was placed on {{ order.created_at|date:"F j, Y" }}.</p>
+        <span class="order-status status-{{ order.status }}">{{ order.get_status_display }}</span>
+    </section>
+    <div class="order-detail-layout">
+        <section class="order-detail-items">
+            <h2>Items in your order</h2>
+            {% for item in order.items.all %}
+                <div class="order-detail-line">
+                    <span>{{ item.quantity }} × {{ item.product_name }}</span>
+                    <strong>PKR {{ item.unit_price|floatformat:0 }}</strong>
+                </div>
+            {% endfor %}
+            <div class="summary-row checkout-total"><span>Total</span><strong>PKR {{ order.total|floatformat:0 }}</strong></div>
+            <p class="summary-note">Payment: {{ order.get_payment_method_display }}</p>
+        </section>
+        <aside class="delivery-card">
+            <h2>Delivering to</h2>
+            <p><strong>{{ order.full_name }}</strong></p>
+            <p>{{ order.address }}<br>{{ order.city }}, {{ order.postal_code }}<br>{{ order.email }}</p>
+            <a class="assistant-order-link" href="{% url 'page_chat' %}">Need help with your order? Ask our assistant ↗</a>
+        </aside>
+    </div>
+    <a class="back-to-shop order-back-link" href="{% url 'shop_home' %}">← Back to the shop</a>
+</main>
+{% if show_login_prompt %}
+<dialog class="guest-order-prompt" id="guest-order-prompt" data-order-reference="{{ order.reference }}" aria-labelledby="guest-order-prompt-title">
+    <div class="guest-order-prompt-content">
+        <button class="guest-order-prompt-close" type="button" data-close-guest-prompt aria-label="Close sign-in prompt">×</button>
+        <p class="eyebrow">ORDER CONFIRMED</p>
+        <h2 id="guest-order-prompt-title">Please sign in</h2>
+        <p>Your order is placed. Sign in to shop with an account next time, or continue as a guest.</p>
+        <a class="button button-dark" href="{% url 'login_page' %}?next={{ request.path|urlencode }}">Sign in</a>
+        <button class="guest-order-continue" type="button" data-close-guest-prompt>Continue as guest</button>
+    </div>
+</dialog>
+{% endif %}
+{% endblock %}

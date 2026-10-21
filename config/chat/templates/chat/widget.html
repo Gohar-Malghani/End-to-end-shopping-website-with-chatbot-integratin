@@ -1,0 +1,49 @@
+{% load static %}
+<form id="shop-chat-csrf" hidden>{% csrf_token %}</form>
+<section class="shop-chat-widget" data-chat-url="{% url 'chat_api' %}" aria-label="Shopping assistant">
+    <div class="shop-chat-panel" id="shop-chat-panel" aria-hidden="true" inert>
+        <header class="shop-chat-header">
+            <img class="shop-chat-logo" src="{% static 'shop/images/shop-logo.svg' %}" alt="">
+            <div class="shop-chat-heading">
+                <strong>Shopping assistant</strong>
+                <span><i aria-hidden="true"></i> Here to help</span>
+            </div>
+            <button class="shop-chat-close" type="button" aria-label="Close chat">×</button>
+        </header>
+        <div class="shop-chat-messages" id="shop-chat-messages" aria-live="polite">
+            <div class="shop-chat-message assistant">
+                {% if request.user.is_authenticated %}
+                    Hi {{ request.user.username }}! Ask me about shoes, watches, product availability, or your orders. I can share product links so you can add items to your bag.
+                {% else %}
+                    Hi there! Ask me about shoes, watches, product availability, or your order.
+                {% endif %}
+            </div>
+            {% if not request.user.is_authenticated or request.user.is_staff %}
+                <div class="shop-chat-signin" id="shop-chat-signin">
+                    <p>Sign in to chat with us and get help with your orders.</p>
+                    <a href="{% url 'login_page' %}?next=/chat/">Sign in to chat <span aria-hidden="true">↗</span></a>
+                </div>
+            {% endif %}
+        </div>
+        {% if request.user.is_authenticated and not request.user.is_staff %}
+            <form class="shop-chat-form" id="shop-chat-form">
+                <label class="visually-hidden" for="shop-chat-input">Message the shopping assistant</label>
+                <input id="shop-chat-input" name="question" type="text" maxlength="2000" placeholder="Ask about the shop…" autocomplete="off" required>
+                <button type="submit" aria-label="Send message">↑</button>
+            </form>
+        {% else %}
+            <div class="shop-chat-guest-note">Available after you sign in</div>
+        {% endif %}
+    </div>
+    <button class="shop-chat-launcher" id="shop-chat-launcher" type="button" aria-label="Open shopping assistant" aria-expanded="false" aria-controls="shop-chat-panel">
+        <svg class="shop-chat-launcher-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M5 5.75A2.75 2.75 0 0 1 7.75 3h8.5A2.75 2.75 0 0 1 19 5.75v6.5A2.75 2.75 0 0 1 16.25 15H11l-4.75 4v-4.18A2.75 2.75 0 0 1 5 12.25v-6.5Z"/>
+            <path d="M8.5 8.5h7m-7 3h4"/>
+        </svg>
+        <svg class="shop-chat-launcher-close" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="m6 6 12 12M18 6 6 18"/>
+        </svg>
+        <span class="shop-chat-launcher-label">Need a hand?</span>
+    </button>
+</section>
+<script src="{% static 'shop-chat.js' %}?v=3" defer></script>

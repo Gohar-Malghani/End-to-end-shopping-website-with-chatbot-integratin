@@ -1,0 +1,61 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f8f7f4">
+    <title>{% block title %}ShopNest{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'shop.css' %}">
+</head>
+<body>
+    <header class="site-header">
+        <a class="store-brand" href="{% url 'shop_home' %}">
+            <img class="store-brand-logo" src="{% static 'shop/images/shop-logo.svg' %}" alt="">
+            <span>ShopNest</span>
+        </a>
+        <nav class="main-nav" aria-label="Main navigation">
+            <a href="{% url 'shop_home' %}">Shop all</a>
+            <a href="{% url 'shop_home' %}?category=shoes">Shoes</a>
+            <a href="{% url 'shop_home' %}?category=watches">Watches</a>
+        </nav>
+        <div class="header-actions">
+            {% if request.user.is_authenticated and not request.user.is_staff %}
+                <span class="header-user" title="{{ request.user.username }}">Hi, {{ request.user.username }}</span>
+                <a class="header-link orders-link" href="{% url 'order_history' %}">My orders</a>
+                <form method="post" action="{% url 'logout_user' %}">
+                    {% csrf_token %}
+                    <button class="header-link header-button" type="submit">Sign out</button>
+                </form>
+            {% else %}
+                {% if request.user.is_staff %}<a class="header-link" href="{% url 'admin:index' %}">Admin</a>{% endif %}
+                <a class="header-link orders-link" href="{% url 'login_page' %}">Sign in</a>
+                <a class="header-link join-link" href="{% url 'register_page' %}">Join us</a>
+            {% endif %}
+            <a class="cart-link" href="{% url 'cart_view' %}" aria-label="Shopping cart, {{ cart_count }} items">
+                Bag <span>{{ cart_count }}</span>
+            </a>
+        </div>
+    </header>
+
+    {% if messages %}
+        <div class="site-messages" role="status" aria-live="polite">
+            {% for message in messages %}
+                <p class="site-message {{ message.tags }}">{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% block content %}{% endblock %}
+
+    <footer class="site-footer">
+        <a class="store-brand footer-brand" href="{% url 'shop_home' %}">
+            <img class="store-brand-logo" src="{% static 'shop/images/shop-logo.svg' %}" alt="">
+            <span>ShopNest</span>
+        </a>
+        <p>Everyday favorites, picked for you.</p>
+        <span>© {% now "Y" %} ShopNest</span>
+    </footer>
+    {% include "chat/widget.html" %}
+</body>
+</html>

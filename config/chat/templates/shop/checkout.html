@@ -1,0 +1,45 @@
+{% extends "shop/base.html" %}
+
+{% block title %}Checkout | ShopNest{% endblock %}
+
+{% block content %}
+<main class="page-shell narrow-shell">
+    <p class="eyebrow">ALMOST YOURS</p>
+    <h1 class="page-title">Checkout</h1>
+    <div class="checkout-layout">
+        <section class="checkout-form-panel">
+            <h2>Delivery details</h2>
+            <p class="checkout-intro">Where should we send your order?</p>
+            <form method="post" class="checkout-form">
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="form-field{% if field.errors %} has-error{% endif %}">
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {{ field }}
+                        {% for error in field.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+                    </div>
+                {% endfor %}
+                <div class="payment-choice">
+                    <span class="payment-radio" aria-hidden="true"></span>
+                    <span><strong>Cash on delivery</strong><small>Pay in cash when your order arrives.</small></span>
+                    <span class="cod-label">COD</span>
+                </div>
+                <button class="button button-dark checkout-submit" type="submit">Place my order <span aria-hidden="true">→</span></button>
+                <p class="secure-note">No online payment is collected at checkout.</p>
+            </form>
+        </section>
+        <aside class="order-summary checkout-summary">
+            <h2>Your order</h2>
+            {% for row in rows %}
+                <div class="checkout-line">
+                    <span class="checkout-quantity">{{ row.quantity }}</span>
+                    <span class="checkout-product-name">{{ row.product.name }}</span>
+                    <strong>PKR {{ row.line_total|floatformat:0 }}</strong>
+                </div>
+            {% endfor %}
+            <div class="summary-row checkout-total"><span>Total</span><strong>PKR {{ subtotal|floatformat:0 }}</strong></div>
+            <p class="summary-note">Delivery charges, if applicable, will be confirmed with you.</p>
+        </aside>
+    </div>
+</main>
+{% endblock %}

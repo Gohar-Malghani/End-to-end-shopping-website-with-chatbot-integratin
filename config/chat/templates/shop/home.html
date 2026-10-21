@@ -1,0 +1,98 @@
+{% extends "shop/base.html" %}
+{% load static %}
+
+{% block title %}Shop shoes & watches | ShopNest{% endblock %}
+
+{% block content %}
+<main>
+    <section class="store-hero">
+        <div class="hero-copy">
+            <p class="eyebrow">THE EVERYDAY EDIT</p>
+            <h1>Good things.<br><span>Great everyday.</span></h1>
+            <p>Find your next favorite, from all-day sneakers to watches that make every moment count.</p>
+            <a class="button button-dark" href="#collection">Explore the collection <span aria-hidden="true">↘</span></a>
+            <div class="hero-notes">
+                <span><i aria-hidden="true">✓</i> Thoughtful picks</span>
+                <span><i aria-hidden="true">✓</i> Cash on delivery</span>
+            </div>
+        </div>
+        <div class="hero-art" aria-label="Shoes and watches collection">
+            <div class="hero-orbit orbit-one"></div>
+            <div class="hero-orbit orbit-two"></div>
+            <div class="hero-sparkle sparkle-one">✳</div>
+            <div class="hero-sparkle sparkle-two">✦</div>
+            <div class="hero-stamp" aria-hidden="true"><span>01</span><span>CURATED<br>FOR YOU</span></div>
+            <div class="hero-shoe" aria-hidden="true"><img src="{% static 'shop/images/shoes-lifestyle.jpg' %}" alt=""></div>
+            <div class="hero-watch" aria-hidden="true"><img src="{% static 'shop/images/watch-classic.jpg' %}" alt=""></div>
+            <div class="hero-caption"><span>NEW SEASON</span><strong>Made for your days</strong></div>
+        </div>
+    </section>
+
+    <section class="shop-section" id="collection">
+        <div class="section-heading">
+            <div>
+                <p class="eyebrow">FIND YOUR FAVORITE</p>
+                <h2>{% if query %}Search results{% elif selected_category %}{{ selected_category|title }}{% else %}Shop the collection{% endif %}</h2>
+            </div>
+            <form class="search-form" method="get" action="{% url 'shop_home' %}">
+                {% if selected_category %}<input type="hidden" name="category" value="{{ selected_category }}">{% endif %}
+                <label class="visually-hidden" for="product-search">Search products</label>
+                <input id="product-search" type="search" name="q" value="{{ query }}" placeholder="Search the collection">
+                <button type="submit" aria-label="Search">⌕</button>
+            </form>
+        </div>
+
+        <div class="category-pills" aria-label="Product categories">
+            <a class="{% if not selected_category %}selected{% endif %}" href="{% url 'shop_home' %}">Everything</a>
+            {% for value, label in categories %}
+                <a class="{% if selected_category == value %}selected{% endif %}" href="{% url 'shop_home' %}?category={{ value }}">{{ label }}</a>
+            {% endfor %}
+        </div>
+
+        {% if products %}
+            <div class="product-grid">
+                {% for product in products %}
+                    <article class="product-card">
+                        <a class="product-art product-art-{{ product.category }}" href="{% url 'product_detail' product.slug %}" aria-label="View {{ product.name }}">
+                            {% if product.image_url %}
+                                <img src="{{ product.image_url }}" alt="{{ product.name }}" loading="lazy">
+                            {% else %}
+                                <img class="product-placeholder-image" src="{% static product.placeholder_image %}" alt="{{ product.name }}" loading="lazy">
+                            {% endif %}
+                            {% if product.featured %}<span class="product-badge">A favorite</span>{% endif %}
+                            <span class="art-index">0{{ forloop.counter }}</span>
+                        </a>
+                        <div class="product-info">
+                            <div>
+                                <p class="product-category">{{ product.get_category_display }}</p>
+                                <h3><a href="{% url 'product_detail' product.slug %}">{{ product.name }}</a></h3>
+                            </div>
+                            <span class="product-price">PKR {{ product.price|floatformat:0 }}</span>
+                        </div>
+                        <div class="product-card-bottom">
+                            {% if product.stock %}
+                                <span class="stock-note">Ready to ship</span>
+                                <form method="post" action="{% url 'cart_add' product.slug %}">
+                                    {% csrf_token %}
+                                    <button class="quick-add" type="submit" aria-label="Add {{ product.name }} to your bag">+</button>
+                                </form>
+                            {% else %}
+                                <span class="stock-note out-of-stock">Currently out of stock</span>
+                                <span class="quick-add disabled" aria-hidden="true">—</span>
+                            {% endif %}
+                        </div>
+                    </article>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <span aria-hidden="true">⌕</span>
+                <h3>No products found</h3>
+                <p>Try another search or browse the full collection.</p>
+                <a class="button button-dark" href="{% url 'shop_home' %}">See everything</a>
+            </div>
+        {% endif %}
+    </section>
+
+</main>
+{% endblock %}

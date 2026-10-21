@@ -1,0 +1,327 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap');
+
+:root {
+    color-scheme: light;
+    font-family: 'DM Sans', Arial, sans-serif;
+    color: #22251f;
+    background: #f8f7f4;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    min-width: 320px;
+    min-height: 100vh;
+    margin: 0;
+    background: #f8f7f4;
+}
+
+button,
+input {
+    font: inherit;
+}
+
+.account-layout {
+    display: grid;
+    grid-template-columns: minmax(360px, .93fr) minmax(480px, 1.07fr);
+    min-height: 100vh;
+}
+
+.account-layout .welcome-panel {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 100vh;
+    overflow: hidden;
+    padding: 35px clamp(32px, 6vw, 82px) 32px;
+    background:
+        radial-gradient(ellipse at 76% 78%, rgb(197 176 137 / 35%), transparent 40%),
+        linear-gradient(155deg, #eeece3 0%, #e5e5d9 100%);
+    color: #293027;
+}
+
+.account-layout .welcome-panel::after {
+    position: absolute;
+    right: -13%;
+    bottom: 11%;
+    width: min(50vw, 420px);
+    aspect-ratio: 1;
+    border: 1px solid rgb(41 48 39 / 12%);
+    border-radius: 50%;
+    content: "";
+    pointer-events: none;
+}
+
+.account-layout .brand,
+.mobile-brand {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 11px;
+    width: fit-content;
+    color: #293027;
+    font-size: 16px;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.account-logo {
+    display: block;
+    width: 38px;
+    height: 38px;
+    flex: 0 0 auto;
+}
+
+.welcome-copy {
+    position: relative;
+    z-index: 1;
+    max-width: 470px;
+    margin: 42px 0 64px;
+}
+
+.eyebrow {
+    margin: 0 0 16px;
+    color: #a64b36;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.8px;
+}
+
+.welcome-copy h1 {
+    max-width: 520px;
+    margin: 0;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(46px, 5.6vw, 74px);
+    font-weight: 500;
+    letter-spacing: -2.6px;
+    line-height: 1.08;
+}
+
+.welcome-description {
+    max-width: 380px;
+    margin: 21px 0 0;
+    color: #686c62;
+    font-size: 13px;
+    line-height: 1.9;
+}
+
+.panel-footer,
+.form-footer {
+    margin: 0;
+    color: #85877f;
+    font-size: 10px;
+}
+
+.form-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 48px 32px 28px;
+    background: #fbfaf7;
+}
+
+.login-card {
+    width: min(100%, 410px);
+    padding: 36px 38px;
+    border: 1px solid #ebe8df;
+    background: #fffefa;
+    box-shadow: 0 22px 70px rgb(41 48 39 / 7%);
+}
+
+.mobile-brand {
+    display: none;
+    margin-bottom: 30px;
+}
+
+.login-card > .eyebrow {
+    margin-bottom: 10px;
+}
+
+.login-card h2 {
+    margin: 0;
+    color: #293027;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(27px, 3vw, 34px);
+    font-weight: 500;
+    letter-spacing: -.7px;
+    line-height: 1.2;
+}
+
+.form-intro {
+    margin: 10px 0 25px;
+    color: #777b72;
+    font-size: 11px;
+    line-height: 1.7;
+}
+
+.account-switch {
+    margin: 18px 0 0;
+    color: #777b72;
+    font-size: 11px;
+    text-align: center;
+}
+
+.account-switch a {
+    color: #a64b36;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.account-switch a:hover {
+    text-decoration: underline;
+}
+
+.messages {
+    margin: 0 0 17px;
+    padding: 1px 13px;
+    border: 1px solid #e4c6bb;
+    border-radius: 3px;
+    background: #fff2ed;
+    color: #873a2b;
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+.message {
+    margin: 9px 0;
+}
+
+.message.success {
+    color: #496947;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.login-form label {
+    margin: 0 0 7px;
+    color: #42463e;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.login-form input {
+    width: 100%;
+    height: 45px;
+    margin-bottom: 16px;
+    padding: 0 12px;
+    border: 1px solid #dedcd4;
+    border-radius: 3px;
+    outline: none;
+    background: #fff;
+    color: #293027;
+    font-size: 11px;
+    transition: border-color .18s, box-shadow .18s;
+}
+
+.register-form input {
+    margin-bottom: 12px;
+}
+
+.login-form input::placeholder {
+    color: #a2a39b;
+}
+
+.login-form input:focus {
+    border-color: #9a8063;
+    box-shadow: 0 0 0 3px rgb(154 128 99 / 12%);
+}
+
+.submit-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 48px;
+    margin-top: 4px;
+    border: 0;
+    border-radius: 3px;
+    background: #293027;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background .18s, transform .18s;
+}
+
+.submit-button:hover {
+    transform: translateY(-1px);
+    background: #41483c;
+}
+
+.submit-button:focus-visible {
+    outline: 3px solid rgb(166 75 54 / 30%);
+    outline-offset: 3px;
+}
+
+.security-note {
+    margin: 19px 0 0;
+    color: #85877f;
+    font-size: 10px;
+    text-align: center;
+}
+
+.security-note span {
+    margin-right: 5px;
+    color: #a64b36;
+}
+
+.form-footer {
+    margin-top: auto;
+    padding-top: 25px;
+}
+
+@media (max-width: 760px) {
+    .account-layout {
+        display: block;
+        min-height: 100vh;
+        padding: 28px 18px;
+        background:
+            radial-gradient(ellipse at 10% 0%, #e7e7dc, transparent 44%),
+            #f8f7f4;
+    }
+
+    .account-layout .welcome-panel {
+        display: none;
+    }
+
+    .form-panel {
+        min-height: calc(100vh - 56px);
+        padding: 18px 0 5px;
+        background: transparent;
+    }
+
+    .login-card {
+        max-width: 440px;
+        margin: auto;
+        padding: 28px 24px;
+    }
+
+    .mobile-brand {
+        display: inline-flex;
+    }
+
+    .login-card h2 {
+        font-size: 30px;
+    }
+}
+
+@media (max-width: 380px) {
+    .account-layout {
+        padding-inline: 12px;
+    }
+
+    .login-card {
+        padding: 24px 18px;
+    }
+}

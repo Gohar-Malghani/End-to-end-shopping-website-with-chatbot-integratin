@@ -1,0 +1,57 @@
+{% extends "shop/base.html" %}
+{% load static %}
+
+{% block title %}Your bag | ShopNest{% endblock %}
+
+{% block content %}
+<main class="page-shell narrow-shell">
+    <p class="eyebrow">YOUR PICKS</p>
+    <h1 class="page-title">Your bag{% if rows %}<span class="title-count">{{ cart_count }} items</span>{% endif %}</h1>
+    {% if rows %}
+        <div class="cart-layout">
+            <div class="cart-items">
+                {% for row in rows %}
+                    <article class="cart-item">
+                        <a class="cart-item-art product-art-{{ row.product.category }}" href="{% url 'product_detail' row.product.slug %}">
+                            {% if row.product.image_url %}
+                                <img src="{{ row.product.image_url }}" alt="">
+                            {% else %}
+                                <img class="product-placeholder-image" src="{% static row.product.placeholder_image %}" alt="">
+                            {% endif %}
+                        </a>
+                        <div class="cart-item-info">
+                            <p class="product-category">{{ row.product.get_category_display }}</p>
+                            <h2><a href="{% url 'product_detail' row.product.slug %}">{{ row.product.name }}</a></h2>
+                            <p class="cart-unit-price">PKR {{ row.product.price|floatformat:0 }}</p>
+                            <form class="quantity-form" method="post" action="{% url 'cart_update' %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="product_id" value="{{ row.product.pk }}">
+                                <label for="quantity-{{ row.product.pk }}">Qty</label>
+                                <input id="quantity-{{ row.product.pk }}" type="number" name="quantity" value="{{ row.quantity }}" min="0" max="{{ row.product.stock }}">
+                                <button type="submit">Update</button>
+                            </form>
+                        </div>
+                        <strong class="cart-line-total">PKR {{ row.line_total|floatformat:0 }}</strong>
+                    </article>
+                {% endfor %}
+                <a class="back-to-shop" href="{% url 'shop_home' %}">← Keep browsing</a>
+            </div>
+            <aside class="order-summary">
+                <h2>Order summary</h2>
+                <div class="summary-row"><span>Subtotal</span><strong>PKR {{ subtotal|floatformat:0 }}</strong></div>
+                <div class="summary-row"><span>Delivery</span><strong>Calculated at checkout</strong></div>
+                <p class="summary-note">Pay with cash when your order arrives.</p>
+                <a class="button button-dark checkout-button" href="{% url 'checkout' %}">Continue to checkout <span aria-hidden="true">→</span></a>
+                <p class="secure-note">Secure checkout · Cash on delivery</p>
+            </aside>
+        </div>
+    {% else %}
+        <div class="empty-state cart-empty">
+            <span aria-hidden="true">◇</span>
+            <h2>Your bag is taking a little rest.</h2>
+            <p>Browse the collection and add something you love.</p>
+            <a class="button button-dark" href="{% url 'shop_home' %}">Explore the shop</a>
+        </div>
+    {% endif %}
+</main>
+{% endblock %}
